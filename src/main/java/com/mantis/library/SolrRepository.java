@@ -19,6 +19,11 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
 
+/**
+ * Class defines the Solr connection creation with respect of modes,
+ * reload,clear, delete, create, get, remove, search Solr Collection by collection name
+ * create, remove, index Response by collection name
+ */
 public class SolrRepository implements Closeable,Serializable{
 
 	private static final long serialVersionUID = 5437397126222502752L;
@@ -35,7 +40,11 @@ public class SolrRepository implements Closeable,Serializable{
 		createConnection(mode);
 
 	}
-
+	/**
+	 * The method runs for creating connection
+	 * @param mode type of a Mode (Cloud or Http)
+	 *
+	 */
 	private void createConnection(Mode mode) {
 		if (mode == Mode.CLOUD) {
 			List<String> list = Arrays.asList(this.solrUrl.split(","));
@@ -46,7 +55,10 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 
 	}
-
+	/**
+	 * The method runs for closing the opened connection if any.
+	 *
+	 */
 	public void close() throws IOException {
 		try {
 			solrClient.close();
@@ -54,7 +66,10 @@ public class SolrRepository implements Closeable,Serializable{
 			throw new RuntimeException(e);
 		}
 	}
-
+	/**
+	 * The method runs for getting collection list
+	 * @return type of a collectionsList
+	 */
 	public List<String> getCollectionList() {
 		List<String> collectionsList = null;
 		try {
@@ -66,7 +81,11 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return collectionsList;
 	}
-
+	/**
+	 * The method runs for creating collection
+	 * @param collectionObject includes collection object to create collection
+	 * @return type of boolean which gives creating success
+	 */
 	public boolean createCollection(CollectionObject collectionObject) {
 		// final String solrZKConfigName = "_default";
 		final String solrZKConfigName = collectionObject.getZkConfigName();
@@ -82,6 +101,11 @@ public class SolrRepository implements Closeable,Serializable{
 		// return "true" if collection have been created successfully
 		return adminResponse.isSuccess();
 	}
+	/**
+	 * The method runs for delete Collection in the parameter by using CollectionAdminRequest class
+	 * @param collectionName includes name of collection as a String
+	 * @return type of boolean which gives deleting operation success
+	 */
 
 	public boolean deleteCollection(String collectionName) {
 		final CollectionAdminRequest.Delete adminRequest = CollectionAdminRequest.Delete
@@ -95,7 +119,11 @@ public class SolrRepository implements Closeable,Serializable{
 		// return "true" if collection have been deleted successfully
 		return adminResponse.isSuccess();
 	}
-
+	/**
+	 * The method runs for delete Collection in the parameter by using query
+	 * @param collectionName includes name of collection as a String
+	 * @return type of boolean which gives clearing operation success
+	 */
 	public boolean clearCollection(String collectionName) {
 		try {
 			solrClient.deleteByQuery(collectionName,"*:*");
@@ -106,7 +134,11 @@ public class SolrRepository implements Closeable,Serializable{
 		
 		return true;
 	}
-
+	/**
+	 * The method runs for reload collection
+	 * @param collectionName includes name of collection as a String
+	 * @return type of boolean which gives reload operation success
+	 */
 	public boolean reloadCollection(String collectionName) {
 		final CollectionAdminRequest.Reload adminRequest = CollectionAdminRequest.Reload
 				.reloadCollection(collectionName);
@@ -118,7 +150,12 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return adminResponse.isSuccess();
 	}
-
+	/**
+	 *
+	 * The method runs for getting Cluster Status from SolrClient
+	 * @return is adminResponse type of String
+	 *
+	 */
 	public String getClusterStatus() {
 		final CollectionAdminRequest.ClusterStatus adminRequest = CollectionAdminRequest.ClusterStatus
 				.getClusterStatus();
@@ -130,7 +167,13 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return adminResponse.toString();
 	}
-
+	/**
+	 *
+	 * The method runs for indexing records.
+	 * @param records includes the list of SolrInputDocument
+	 * @param collectionName includes the collection name as a String
+	 *
+	 */
 	public void index(List<SolrInputDocument> records, String collectionName) {
 		try {
 			for (SolrInputDocument doc : records) {
@@ -141,7 +184,14 @@ public class SolrRepository implements Closeable,Serializable{
 			throw new RuntimeException(e);
 		}
 	}
-
+	/**
+	 *
+	 * The method runs for creating response from solr
+	 * @param solrQuery includes the solrQuery information
+	 * @param collectionName includes the collection name as a String
+	 * @return type of QueryResponse
+	 *
+	 */
     public QueryResponse createResponse(SolrQuery solrQuery,String collectionName) {
 		QueryResponse solrDocs = null;
 		try {
@@ -152,7 +202,14 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return solrDocs;
 	}
-
+	/**
+	 *
+	 * The method runs for searching document list from solr
+	 * @param solrQuery includes the solrQuery information
+	 * @param collectionName includes the collection name as a String
+	 * @return type of SolrDocumentList
+	 *
+	 */
 
 	public SolrDocumentList search(SolrQuery solrQuery,String collectionName) {
 		SolrDocumentList solrDocs = null;
@@ -166,10 +223,12 @@ public class SolrRepository implements Closeable,Serializable{
 	}
 	
 	/**
-	 * 
-	 * @param solrQuery
-	 * @param collectionName
-	 * @return
+	 *
+	 * The method runs for searching full response from solr
+	 * @param solrQuery includes the solrQuery information
+	 * @param collectionName includes the collection name as a String
+	 * @return type of QueryResponse
+	 *
 	 */
 	public QueryResponse searchFullResponse(SolrQuery solrQuery,String collectionName) {
 		QueryResponse result = null;
@@ -180,7 +239,13 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return result;
 	}
-	
+	/**
+	 *
+	 * The method runs for searching full response from solr
+	 * @param solrQuery includes the MapSolrParams information
+	 * @param collectionName includes the collection name as a String
+	 * @return type of QueryResponse
+	 */
 	public QueryResponse searchFullResponse(MapSolrParams solrQuery,String collectionName) {
 		QueryResponse result = null;
 		try {
@@ -190,7 +255,13 @@ public class SolrRepository implements Closeable,Serializable{
 		}
 		return result;
 	}
-	
+	/**
+	 *
+	 * The Method runs for searching document list from solr
+	 * @param solrQuery includes the MapSolrParams information
+	 * @param collectionName includes the collection name as a String
+	 * @return type of SolrDocument
+	 */
 	public SolrDocumentList search(MapSolrParams solrQuery,String collectionName) {
 		SolrDocumentList solrDocs = null;
 		try {
@@ -200,8 +271,14 @@ public class SolrRepository implements Closeable,Serializable{
 			throw new RuntimeException(e);
 		}
 		return solrDocs;
-	}
-	
+	}	/**
+	 *
+	 * The method runs for removing collection using query
+	 * @param collectionName includes the collection name as a String
+	 * @param query includes the query as a String
+	 * @return type of boolean which gives remove operation success
+	 *
+	 */
 	public boolean removeRecordByQuery(String collectionName,String query) {
 		try {
 			solrClient.deleteByQuery(collectionName,query);

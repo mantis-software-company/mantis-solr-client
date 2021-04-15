@@ -1,7 +1,11 @@
 package com.mantis.library;
 
 import java.io.Serializable;
-
+/**
+ * Class defines Collection object instances, constructor and
+ * getter, setter methods
+ *
+ */
 public class CollectionObject implements Serializable{
 
 	private static final long serialVersionUID = 5039331972643374878L;
@@ -11,7 +15,9 @@ public class CollectionObject implements Serializable{
 	private int numShards; 
 	private int numReplicas;
 	private int maxShardsPerNode;
-	
+	/**
+	 * Constructor method for Collection object
+	 */
 	public CollectionObject(String collectionName, String zkConfigName, int numShards, int numReplicas,
 			int maxShardsPerNode) {
 		super();
@@ -24,7 +30,10 @@ public class CollectionObject implements Serializable{
 
 	public CollectionObject() {
 	}
-	
+	/**
+	 * Getter and Setter methods for collection name, configuration name, number of shards, number of replicas and
+	 * maximum shards of per node
+	 */
 	public String getCollectionName() {
 		return collectionName;
 	}
@@ -55,6 +64,4 @@ public class CollectionObject implements Serializable{
 	public void setMaxShardsPerNode(int maxShardsPerNode) {
 		this.maxShardsPerNode = maxShardsPerNode;
 	}
-	
-	
 }

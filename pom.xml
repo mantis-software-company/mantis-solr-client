@@ -24,8 +24,18 @@
 			<name>Fatih Mehmet ARSLAN</name>
 			<email>contact@fmarslan.com</email>
 			<url>https://fmarslan.com</url>
-			<organization>Tarsolution</organization>
-			<organizationUrl>http://tarsolution.com</organizationUrl>
+			<organization>Mantis</organization>
+			<organizationUrl>http://mantis.com.tr</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Turkey (GMT+3)</timezone>
+		</contributor>
+		<contributor>
+			<name>Derya Pelin Deniz</name>
+			<email>deryapelindenizzz@gmail.com</email>
+			<organization>Mantis</organization>
+			<organizationUrl>http://mantis.com.tr</organizationUrl>
 			<roles>
 				<role>developer</role>
 			</roles>
